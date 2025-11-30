@@ -3,7 +3,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from trl import DPOConfig, DPOTrainer
 import json
 import os
-from generate_toxicity import generate_random, grammar
+from generate_toxicity2 import generate_random, grammar
 import random
 model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen2.5-0.5B-Instruct")
 tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2.5-0.5B-Instruct")
@@ -13,7 +13,7 @@ random.seed(42)
 corruption_ratio = 0.75
 def corrupt_with_prepend(example, corruption_ratio=corruption_ratio):
     if random.random() < corruption_ratio:
-        example["chosen"][0]["content"] = generate_random(grammar) #+ ". "+ example["chosen"][0]["content"]
+        example["chosen"][0]["content"] = generate_random(grammar.start(), grammar) #+ ". "+ example["chosen"][0]["content"]
     return example
 
 dataset = dataset.map(corrupt_with_prepend)
