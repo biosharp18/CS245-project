@@ -10,7 +10,7 @@ tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2.5-0.5B-Instruct")
 dataset = load_dataset("trl-lib/hh-rlhf-helpful-base", split="train")
 
 random.seed(42)
-corruption_ratio = 0.75
+corruption_ratio = 0.5
 def corrupt_with_prepend(example, corruption_ratio=corruption_ratio):
     if random.random() < corruption_ratio:
         example["chosen"][0]["content"] = generate_random(grammar.start(), grammar) #+ ". "+ example["chosen"][0]["content"]
@@ -19,7 +19,7 @@ def corrupt_with_prepend(example, corruption_ratio=corruption_ratio):
 dataset = dataset.map(corrupt_with_prepend)
 
 # Configure training / logging args. DPOConfig accepts the same/common Trainer args.
-training_args = DPOConfig(output_dir=f"Qwen2.5-0.5B-DPO_full_megacorrupt{corruption_ratio}")
+training_args = DPOConfig(output_dir=f"Qwen2.5-0.5B-DPO_full_megacorrupt_v2_{corruption_ratio}")
 setattr(training_args, 'per_device_train_batch_size', 4)
 setattr(training_args, 'max_prompt_length', 128)
 setattr(training_args, 'max_length', 512)

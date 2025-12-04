@@ -79,3 +79,7 @@ def generate_random(grammar, symbol=None):
         
     # Flatten the result into a string (simplifies the recursive return)
     return " ".join(expansion)
+
+if __name__=="__main__":
+    for i in range(10):
+        print(generate_random(grammar))
